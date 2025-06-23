@@ -1,6 +1,6 @@
 # HackingStudio
 
-HackingStudio is a powerful toolset for cyber enthusiasts and professionals, developed by Realtin Sypher. It provides a variety of functionalities to prepare and cook cyber recipes, leveraging advanced cryptographic techniques and data manipulation steps.
+HackingStudio is a powerful toolset for cyber enthusiasts and professionals, developed by Realtin (Coding Boson). It provides a variety of functionalities to prepare and cook cyber recipes, leveraging advanced cryptographic techniques and data manipulation steps.
 
 ## Features
 
