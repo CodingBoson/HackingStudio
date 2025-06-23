@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	  <Authors>Realtin (CodingBoson)</Authors>
+	  <Company>BosonWare, Technologies</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BosonWare.Runtime" Version="1.0.0" />
+    <PackageReference Include="Realtin.Xdsl" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>
