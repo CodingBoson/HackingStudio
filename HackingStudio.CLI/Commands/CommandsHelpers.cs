@@ -4,10 +4,10 @@ namespace HackingStudio.CLI;
 
 internal static class CommandsHelpers
 {
-
     public static async Task<byte[]> GetSmartData(string data)
     {
-        if (File.Exists(data)) {
+        if (File.Exists(data))
+        {
             return await File.ReadAllBytesAsync(data);
         }
 

@@ -1,6 +1,6 @@
-﻿using Cocona;
+﻿using System.Diagnostics;
+using Cocona;
 using HackingStudio.Core;
-using System.Diagnostics;
 
 namespace HackingStudio.CLI;
 
@@ -11,7 +11,7 @@ public sealed class BruteCommands
 {
     [Command("find")]
     public static async Task Find(
-        [Argument] string hash, 
+        [Argument] string hash,
         [Option('a')] string algorithm,
         [Option('w')] string list,
         [Option('e')] string encoding = "base64",
@@ -26,8 +26,14 @@ public sealed class BruteCommands
 
             """);
 
+        SmartConsole.LogInfo("Loading word list...");
+
+        long startingMemory = GC.GetTotalMemory(forceFullCollection: false);
+
         var words = await Brute.LoadWordListAsync(list);
 
+        SmartConsole.LogInfo("Starting brute force search...");
+        Console.WriteLine();
         try {
             var watch = Stopwatch.StartNew();
 
@@ -44,6 +50,14 @@ public sealed class BruteCommands
         }
         catch (Exception ex) {
             SmartConsole.LogError($"{ex.GetType().Name}: {ex.Message}");
+
+            return;
         }
+
+        long endingMemory = GC.GetTotalMemory(forceFullCollection: false);
+
+        long bytesUsed = endingMemory - startingMemory;
+
+        SmartConsole.LogInfo($"Memory Consumed: {IOUtility.PrettySize(bytesUsed)}");
     }
 }

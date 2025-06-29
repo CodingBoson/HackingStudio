@@ -26,12 +26,12 @@ public sealed class Brute
             filteredWords = filteredWords.SkipWhile(x => x.StartsWith("#!comment: ", StringComparison.OrdinalIgnoreCase));
         }
 
-        return filteredWords.ToList();
+        return [.. filteredWords];
     }
 
     public string? Find(string hash, string algorithm, string encoding, List<string> words)
     {
-        ParallelOptions options = new ParallelOptions {
+        ParallelOptions options = new() {
             MaxDegreeOfParallelism = Threads
         };
 
@@ -57,7 +57,7 @@ public sealed class Brute
         return encoding.ToLowerInvariant() switch {
             "base58" => Base58.EncodeData(hash),
             "base64" => Convert.ToBase64String(hash),
-            "hex" => BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant(),
+            "hex" => Convert.ToHexStringLower(hash),
             _ => throw new NotSupportedException($"Encoding {encoding} is not supported.")
         };
     }
