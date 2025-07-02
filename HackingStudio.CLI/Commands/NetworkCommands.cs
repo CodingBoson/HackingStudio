@@ -5,7 +5,7 @@ using HackingStudio.Core.Networking;
 namespace HackingStudio.CLI;
 
 [HasSubCommands(typeof(NetworkCommands), "net", Description = "Network commands.")]
-public sealed class NetworkCommandsSection { }
+public sealed class NetworkCommandsSection;
 
 public sealed class NetworkCommands
 {

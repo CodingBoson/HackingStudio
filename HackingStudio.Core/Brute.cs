@@ -1,7 +1,6 @@
-﻿using BosonWare.Cryptography;
-using BosonWare.Encoding;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
+using BosonWare.Encoding;
 
 namespace HackingStudio.Core;
 
@@ -11,45 +10,42 @@ public sealed class Brute
 
     public Brute(int threads)
     {
-        if (threads < 0) threads = Environment.ProcessorCount;
+        if (threads <= 0)
+            threads = Environment.ProcessorCount;
 
         Threads = threads;
     }
 
-    public static async Task<List<string>> LoadWordListAsync(string path, bool ignoreComments = true)
-    {
-        var lines = await File.ReadAllLinesAsync(path);
-
-        var filteredWords = lines.Distinct();
-
-        if (ignoreComments) {
-            filteredWords = filteredWords.SkipWhile(x => x.StartsWith("#!comment: ", StringComparison.OrdinalIgnoreCase));
-        }
-
-        return [.. filteredWords];
-    }
-
     public string? Find(string hash, string algorithm, string encoding, List<string> words)
     {
+        using var cancellationSource = new CancellationTokenSource();
+
         ParallelOptions options = new() {
-            MaxDegreeOfParallelism = Threads
+            MaxDegreeOfParallelism = Threads,
+            CancellationToken = cancellationSource.Token
         };
 
         object @lock = new();
-        string? foundWord = null;
+        string? match = null;
 
-        Parallel.ForEach(words, options, (word) => {
-            byte[] wordHash = Hash(algorithm, word);
-            string encodedHash = Encode(wordHash, encoding);
+        try {
+            Parallel.ForEach(words, options, (word) => {
+                byte[] wordHash = Hash(algorithm, word);
+                string encodedHash = Encode(wordHash, encoding);
 
-            if (encodedHash == hash) {
-                lock (@lock) {
-                    foundWord = word;
+                if (encodedHash == hash) {
+                    lock (@lock) {
+                        match = word;
+
+                        // Break the loop for all threads.
+                        cancellationSource.Cancel();
+                    }
                 }
-            }
-        });
+            });
+        }
+        catch (OperationCanceledException) { }
 
-        return foundWord;
+        return match;
     }
 
     public static string Encode(byte[] hash, string encoding)
@@ -72,5 +68,21 @@ public sealed class Brute
             "sha512" or "sha-512" => SHA512.HashData(Encoding.UTF8.GetBytes(word)),
             _ => throw new NotSupportedException($"Algorithm {algorithm} is not supported.")
         };
+    }
+
+    public static async Task<List<string>> LoadWordListAsync(
+        string path,
+        bool ignoreComments = true)
+    {
+        var lines = await File.ReadAllLinesAsync(path);
+
+        var filteredWords = lines.Distinct();
+
+        if (ignoreComments) {
+            filteredWords = filteredWords
+                .Where(x => !x.StartsWith("#!comment: ", StringComparison.OrdinalIgnoreCase));
+        }
+
+        return [.. filteredWords];
     }
 }

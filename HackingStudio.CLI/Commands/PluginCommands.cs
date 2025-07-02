@@ -5,7 +5,7 @@ using HackingStudio.Core;
 namespace HackingStudio.CLI;
 
 [HasSubCommands(typeof(PluginCommands), "plugin", Description = "Manage plugins for HackingStudio.")]
-public sealed class PluginCommandsSection { }
+public sealed class PluginCommandsSection;
 
 public sealed class PluginCommands
 {

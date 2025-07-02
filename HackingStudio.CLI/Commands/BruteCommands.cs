@@ -5,7 +5,7 @@ using HackingStudio.Core;
 namespace HackingStudio.CLI;
 
 [HasSubCommands(typeof(BruteCommands), "brute", Description = "Brute force commands 🐂.")]
-public sealed class BruteCommandsSection { }
+public sealed class BruteCommandsSection; 
 
 public sealed class BruteCommands
 {

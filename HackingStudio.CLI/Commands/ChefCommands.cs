@@ -8,7 +8,7 @@ using System.Text;
 namespace HackingStudio.CLI;
 
 [HasSubCommands(typeof(ChefCommands), "chef", Description = "Prepare and Cook cyber recipes.")]
-public sealed class ChefCommandsSection { }
+public sealed class ChefCommandsSection;
 
 public sealed class ChefCommands
 {

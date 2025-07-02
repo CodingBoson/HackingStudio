@@ -6,7 +6,7 @@ namespace HackingStudio.CLI;
 
 
 [HasSubCommands(typeof(ObfuscatorCommands), "obfuscator", Description = "Obfuscator commands.")]
-public sealed class ObfuscatorCommandsSection { }
+public sealed class ObfuscatorCommandsSection;
 
 public sealed class ObfuscatorCommands
 {

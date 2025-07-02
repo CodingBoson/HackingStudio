@@ -1,12 +1,11 @@
 using System.Diagnostics;
-using System.Threading.Tasks;
 using Cocona;
 using HackingStudio.Core;
 
 namespace HackingStudio.CLI.Forensics;
 
 [HasSubCommands(typeof(FSCommands), "fs", Description = "File system commands.")]
-public sealed class FSCommandsSection { }
+public sealed class FSCommandsSection;
 
 public sealed class FSCommands
 {
