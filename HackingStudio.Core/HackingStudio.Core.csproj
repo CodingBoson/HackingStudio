@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BosonWare.Runtime" Version="1.0.0" />
-    <PackageReference Include="Realtin.Xdsl" Version="1.0.0" />
+    <PackageReference Include="BosonWare.Runtime" Version="2.0.1" />
+    <PackageReference Include="Realtin.Xdsl" Version="1.2.0" />
   </ItemGroup>
 
 </Project>

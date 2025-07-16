@@ -1,8 +1,5 @@
 ﻿using Cocona;
 using HackingStudio.Core;
-using Maths;
-using System;
-using System.IO;
 using System.Text;
 
 namespace HackingStudio.CLI.Forensics;
@@ -22,9 +19,9 @@ public class FileTypeDetector
 
         // Read up to 64 bytes. This buffer should be enough for most magic numbers.
         byte[] buffer = new byte[64];
-        using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+        using (FileStream fs = new(filePath, FileMode.Open, FileAccess.Read))
         {
-            fs.Read(buffer, 0, buffer.Length);
+            fs.ReadExactly(buffer);
         }
 
         // --- Image/Document Checks (existing ones) ---

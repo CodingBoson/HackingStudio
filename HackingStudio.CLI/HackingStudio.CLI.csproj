@@ -17,13 +17,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BosonWare.Runtime" Version="1.0.0" />
+    <PackageReference Include="BosonWare.Runtime" Version="2.0.1" />
     <PackageReference Include="Cocona" Version="2.2.0" />
     <PackageReference Include="Figgle" Version="0.5.1" />
     <PackageReference Include="RestSharp" Version="112.1.0" />
     <PackageReference Include="Spectre.Console" Version="0.49.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
-    <PackageReference Include="Realtin.Xdsl" Version="1.0.0" />
+    <PackageReference Include="Realtin.Xdsl" Version="1.2.0" />
   </ItemGroup>
 
 </Project>

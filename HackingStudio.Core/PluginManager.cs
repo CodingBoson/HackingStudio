@@ -7,11 +7,11 @@ public static class PluginManager
 {
 	private const string CacheLabel = "HackingStudio.Core.PluginManager";
 
-	public static string PluginsPath => Application.GetDataFolder("plugins");
+	public static string PluginsPath => Application.GetDirectory("plugins");
 
 	public static string GetPluginRoot(Plugin plugin)
 	{
-		var rootDirectory = Application.GetDataFolder(PluginsPath, plugin.Name.ToLowerInvariant());
+		var rootDirectory = Application.GetDirectory(PluginsPath, plugin.Name.ToLowerInvariant());
 
 		return rootDirectory;
 	}
@@ -20,7 +20,7 @@ public static class PluginManager
 
 	public static async Task InstallAsync(Plugin plugin, string source)
 	{
-		var rootDirectory = Application.GetDataFolder(PluginsPath, plugin.Name.ToLowerInvariant());
+		var rootDirectory = Application.GetDirectory(PluginsPath, plugin.Name.ToLowerInvariant());
 
 		if (Directory.Exists(source)) {
 			var sourceFiles = Directory.GetFiles(source, "", SearchOption.AllDirectories);
@@ -47,9 +47,10 @@ public static class PluginManager
 
 	public static async Task<bool> UninstallAsync(string name)
 	{
-		if ((await GetPluginAsync(name)) is not Plugin plugin) return false;
+		if ((await GetPluginAsync(name)) is not Plugin plugin)
+			return false;
 
-		var path = Application.GetDataFolder(PluginsPath, plugin.Name.ToLowerInvariant());
+		var path = Application.GetDirectory(PluginsPath, plugin.Name.ToLowerInvariant());
 
 		Directory.Delete(path, recursive: true);
 
@@ -62,8 +63,8 @@ public static class PluginManager
 			return;
 		}
 
-		var oldPath = Application.GetDataPath(PluginsPath, pluginName.ToLowerInvariant());
-		var newPath = Application.GetDataPath(PluginsPath, newName.ToLowerInvariant());
+		var oldPath = Application.GetPath(PluginsPath, pluginName.ToLowerInvariant());
+		var newPath = Application.GetPath(PluginsPath, newName.ToLowerInvariant());
 
 		Directory.Move(oldPath, newPath);
 
@@ -83,7 +84,7 @@ public static class PluginManager
 	{
 		Cache.Remove(CacheLabel);
 
-		var path = Application.GetDataPath(PluginsPath, plugin.Name.ToLowerInvariant(), "plugin.conf");
+		var path = Application.GetPath(PluginsPath, plugin.Name.ToLowerInvariant(), "plugin.conf");
 
 		var document = XdslSerializer.Serialize(plugin);
 
@@ -103,7 +104,7 @@ public static class PluginManager
 
 			var plugins = new List<Plugin>();
 
-			foreach(var path in configFiles) {
+			foreach (var path in configFiles) {
 				var xdslData = await File.ReadAllTextAsync(path);
 
 				var plugin = XdslSerializer.Deserialize<Plugin>(xdslData);
@@ -125,7 +126,8 @@ public static class PluginManager
 	{
 		var plugins = await GetPluginsAsync();
 
-		return plugins.Where(x => x.Name.Contains(term, StringComparison.InvariantCultureIgnoreCase)).
-					   ToList();
+		return [.. plugins
+			.Where(x => x.Name.Contains(term, StringComparison.InvariantCultureIgnoreCase))
+			];
 	}
 }

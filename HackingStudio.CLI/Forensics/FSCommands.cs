@@ -16,24 +16,26 @@ public sealed class FSCommands
     {
         ShutdownManager.Subscribe();
 
-        var watch = Stopwatch.StartNew();
-
         long sizeInBytes = IOUtility.ParseSize(size);
+        Stopwatch watch = Stopwatch.StartNew();
+        FileStream stream = File.OpenWrite(path);
 
-        byte[] bytes = new byte[sizeInBytes];
+        byte[] buffer = new byte[Math.Min(4096, sizeInBytes)];
+        long bytesWritten = 0;
+        while (bytesWritten < sizeInBytes) {
+            if (random) {
+                Random.Shared.NextBytes(buffer);
+            }
+            else {
+                buffer.AsSpan().Clear();
+            }
 
-        if (random) {
-            Random.Shared.NextBytes(bytes);
+            await stream.WriteAsync(buffer);
+
+            await stream.FlushAsync();
+
+            bytesWritten += buffer.Length;
         }
-        else {
-            bytes.AsSpan().Clear();
-        }
-
-        SmartConsole.LogInfo($"Created array in {watch.Elapsed.TotalSeconds}sec");
-
-        watch.Restart();
-
-        await File.WriteAllBytesAsync(path, bytes);
 
         SmartConsole.LogInfo($"Allocated {size} in {watch.Elapsed.TotalSeconds}sec");
     }

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="HackingStudio.CLI/HackingStudio.CLI.csproj" />
+  <Project Path="HackingStudio.Core/HackingStudio.Core.csproj" />
+</Solution>

@@ -1,7 +1,4 @@
-﻿using HackingStudio.Core;
-using System.Diagnostics;
-
-namespace HackingStudio.CLI;
+﻿namespace HackingStudio.CLI;
 
 public static class ShutdownManager
 {
@@ -14,7 +11,7 @@ public static class ShutdownManager
 
 			exited?.Invoke();
 
-			Process.GetCurrentProcess().Kill();
+			Environment.Exit(0);
 		};
 	}
 }

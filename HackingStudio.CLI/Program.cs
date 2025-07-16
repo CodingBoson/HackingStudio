@@ -4,9 +4,7 @@ using HackingStudio.CLI;
 using HackingStudio.CLI.Forensics;
 using HackingStudio.Core;
 
-Application.AssertSupportedPlatform();
-
-await Application.LoadThirdPartyLibrariesAsync();
+await LibraryHelpers.LoadThirdPartyLibrariesAsync();
 
 if (args.Length == 0 || args.Contains("-h") || args.Contains("--help")) {
 	var title = FiggleFonts.Slant.Render("Hacking Studio");
