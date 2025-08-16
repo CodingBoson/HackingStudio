@@ -4,7 +4,7 @@
 
 dotnet pack -c Release HackingStudio.csproj
 dotnet tool uninstall HackingStudio --global > /dev/null
-dotnet tool install --global --add-source ./bin/nupkg HackingStudio --version 3.0.0
+dotnet tool install --global --add-source ./bin/nupkg HackingStudio --version 1.0.0
 
 # TODO: Create a new alias 'hs'.
 

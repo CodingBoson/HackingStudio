@@ -18,7 +18,7 @@ public class FileTypeDetector
         // Read up to 64 bytes. This buffer should be enough for most magic numbers.
         var buffer = new byte[64];
         using (FileStream fs = new(filePath, FileMode.Open, FileAccess.Read)) {
-            fs.ReadExactly(buffer);
+            fs.Read(buffer);
         }
 
         switch (buffer.Length) {

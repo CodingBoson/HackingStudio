@@ -87,7 +87,7 @@ public sealed class PingCommand : Command<PingCommand.Options>
         public int Count { get; set; } = 5;
 
         [Option('p', HelpText = "The protocol to use e.g ICMP (Default), TCP (Use only if the target is not replaying to ping messages.)")]
-        public string Protocol { get; set; } = "ICMP";
+        public PingProtocol Protocol { get; set; } = PingProtocol.ICMP;
 
         [Option('t', HelpText = "How long to wait for the target to replay.")]
         public int Timeout { get; set; } = 5000;

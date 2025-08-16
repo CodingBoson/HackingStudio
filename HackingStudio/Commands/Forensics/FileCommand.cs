@@ -15,11 +15,11 @@ internal sealed class FileCommand : IForensicsCommand, ICommand
             return Task.CompletedTask;
         }
 
-        using var fileStream = File.OpenRead(path);
-
-        Console.WriteLine(fileStream.Length > 1024
-            ? $"Size: {fileStream.Length} | {IOUtility.PrettySize(fileStream.Length)}"
-            : $"Size: {IOUtility.PrettySize(fileStream.Length)}");
+        using (var fileStream = File.OpenRead(path)) {
+            Console.WriteLine(fileStream.Length > 1024
+                ? $"Size: {fileStream.Length} | {IOUtility.PrettySize(fileStream.Length)}"
+                : $"Size: {IOUtility.PrettySize(fileStream.Length)}");
+        }
 
         var type = FileTypeDetector.GetFileType(path);
 

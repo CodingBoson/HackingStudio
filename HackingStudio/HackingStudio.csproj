@@ -21,6 +21,8 @@
     <RepositoryUrl>
       https://github.com/BosonWare-Technologies/HackingStudio
     </RepositoryUrl>
+    
+    <PackageTags>hacking hacking-cli tool</PackageTags>
 
     <Version>1.0.0</Version>
     
@@ -35,7 +37,7 @@
 
   <ItemGroup>
     <PackageReference Include="BosonWare.Runtime" Version="2.2.1" />
-      <PackageReference Include="BosonWare.TerminalApp" Version="2.1.0" />
+      <PackageReference Include="BosonWare.TerminalApp" Version="2.2.1" />
     <PackageReference Include="Figgle" Version="0.5.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageReference Include="Realtin.Xdsl" Version="1.2.0" />

@@ -3,10 +3,16 @@ using System.Net.Sockets;
 
 namespace HackingStudio.Core.Networking;
 
+public enum PingProtocol
+{
+    ICMP,
+    TCP
+}
+
 public static class PingService
 {
     public static async Task Ping(string target,
-        string protocol,
+        PingProtocol protocol,
         int timeout = 5000,
         double delay = 1,
         int count = 3,
@@ -16,69 +22,52 @@ public static class PingService
     {
         if (count == -1) {
             while (!cancellationToken.IsCancellationRequested) {
-                switch (protocol.ToUpper()) {
-                    case "ICMP":
-                        await ICMPPing(target, timeout, bufferSize, verboseOutput);
-
-                        break;
-
-                    case "TCP":
-                        await TCPPing(target, timeout, cancellationToken);
-
-                        break;
-
-                    default:
-                        SmartConsole.LogError($"The specified protocol '{protocol}' is not supported. (e.g ICMP (Default), TCP)");
-                        break;
-                }
+                await HandlePing(target, protocol, timeout, bufferSize, verboseOutput, cancellationToken);
 
                 await Task.Delay(TimeSpan.FromSeconds(delay), cancellationToken);
             }
         }
 
         for (var i = 0; i < count; i++) {
-            switch (protocol.ToUpper()) {
-                case "ICMP":
-                    await ICMPPing(target, timeout, bufferSize, verboseOutput);
+            await HandlePing(target, protocol, timeout, bufferSize, verboseOutput, cancellationToken);
 
-                    break;
-
-                case "TCP":
-                    await TCPPing(target, timeout, cancellationToken);
-
-                    break;
-
-                default:
-                    SmartConsole.LogError($"The specified protocol '{protocol}' is not supported.(e.g ICMP (Default), TCP)");
-                    break;
-            }
 
             await Task.Delay(TimeSpan.FromSeconds(delay), cancellationToken);
         }
     }
 
-    public static async Task SimplePing(string target,
-        string protocol,
-        int timeout = 5000,
-        int bufferSize = 0,
-        bool verboseOutput = false,
-        CancellationToken cancellationToken = default)
+    private static async Task HandlePing(string target,
+        PingProtocol protocol,
+        int timeout,
+        int bufferSize,
+        bool verboseOutput,
+        CancellationToken cancellationToken)
     {
-        switch (protocol.ToUpper()) {
-            case "ICMP":
+        switch (protocol) {
+            case PingProtocol.ICMP:
                 await ICMPPing(target, timeout, bufferSize, verboseOutput);
 
                 break;
 
-            case "TCP":
+            case PingProtocol.TCP:
                 await TCPPing(target, timeout, cancellationToken);
 
                 break;
 
             default:
-                SmartConsole.LogError($"The specified protocol '{protocol}' is not supported.(e.g ICMP (Default), TCP)");
+                SmartConsole.LogError($"The specified protocol '{protocol}' is not supported. (e.g ICMP (Default), TCP)");
                 break;
         }
+    }
+
+    public static async Task SimplePing(string target,
+        PingProtocol protocol,
+        int timeout = 5000,
+        int bufferSize = 0,
+        bool verboseOutput = false,
+        CancellationToken cancellationToken = default)
+    {
+        await HandlePing(target, protocol, timeout, bufferSize, verboseOutput, cancellationToken);
     }
 
     public static async Task ICMPPing(string target, int timeout, int bufferSize = 0, bool verboseOutput = false)
