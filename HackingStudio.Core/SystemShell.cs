@@ -1,6 +1,3 @@
 ﻿namespace HackingStudio.Core;
 
-public static class SystemShell
-{
-
-}
+public static class SystemShell { }

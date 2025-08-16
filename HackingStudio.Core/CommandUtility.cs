@@ -5,39 +5,36 @@ namespace HackingStudio.Core;
 
 public static class CommandUtility
 {
-	[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-	public static (string CommandName, string Args) Parse(string command)
-	{
-		command = command.Trim();
+    [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+    public static (string CommandName, string Args) Parse(string command)
+    {
+        command = command.Trim();
 
-		int num = command.IndexOf(' ');
+        var num = command.IndexOf(' ');
 
-		if (num > 0) {
-			var name = command[..num];
-			var arguments = command[(num + 1)..];
+        if (num > 0) {
+            var name = command[..num];
+            var arguments = command[(num + 1)..];
 
-			return (name, arguments);
-		}
+            return (name, arguments);
+        }
 
-		return (command, "");
-	}
+        return (command, "");
+    }
 
-	public static async Task RunAsync(string bin, string args)
-	{
-		var start = new ProcessStartInfo(bin, args) {
-			RedirectStandardError = true,
-			RedirectStandardOutput = true,
-			RedirectStandardInput = true,
-			CreateNoWindow = true,
-		};
+    public static async Task RunAsync(string bin, string args)
+    {
+        var start = new ProcessStartInfo(bin, args) {
+            RedirectStandardError = true, RedirectStandardOutput = true, RedirectStandardInput = true, CreateNoWindow = true
+        };
 
-		var process = Process.Start(start)!;
+        var process = Process.Start(start)!;
 
-		await process.WaitForExitAsync();
+        await process.WaitForExitAsync();
 
-		Console.Write(process.StandardOutput.ReadToEnd());
-		Console.Write(process.StandardError.ReadToEnd());
+        Console.Write(process.StandardOutput.ReadToEnd());
+        Console.Write(process.StandardError.ReadToEnd());
 
-		Console.WriteLine();
-	}
+        Console.WriteLine();
+    }
 }

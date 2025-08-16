@@ -5,14 +5,17 @@ namespace HackingStudio.Core.Networking;
 
 public static class PingService
 {
-    public static async Task Ping(string target, string protocol,
-        int timeout = 5000, double delay = 1, int count = 3,
+    public static async Task Ping(string target,
+        string protocol,
+        int timeout = 5000,
+        double delay = 1,
+        int count = 3,
         int bufferSize = 0,
         bool verboseOutput = false,
         CancellationToken cancellationToken = default)
     {
         if (count == -1) {
-            while(!cancellationToken.IsCancellationRequested) {
+            while (!cancellationToken.IsCancellationRequested) {
                 switch (protocol.ToUpper()) {
                     case "ICMP":
                         await ICMPPing(target, timeout, bufferSize, verboseOutput);
@@ -33,7 +36,7 @@ public static class PingService
             }
         }
 
-        for (int i = 0; i < count; i++) { 
+        for (var i = 0; i < count; i++) {
             switch (protocol.ToUpper()) {
                 case "ICMP":
                     await ICMPPing(target, timeout, bufferSize, verboseOutput);
@@ -54,8 +57,11 @@ public static class PingService
         }
     }
 
-    public static async Task SimplePing(string target, string protocol,
-        int timeout = 5000, int bufferSize = 0, bool verboseOutput = false, 
+    public static async Task SimplePing(string target,
+        string protocol,
+        int timeout = 5000,
+        int bufferSize = 0,
+        bool verboseOutput = false,
         CancellationToken cancellationToken = default)
     {
         switch (protocol.ToUpper()) {
@@ -105,14 +111,14 @@ public static class PingService
 
             if (verboseOutput) {
                 SmartConsole.WriteLine($$"""
-                    {
-                        "IPAddress": "{{replay.Address}}",
-                        "Buffer": "{{Convert.ToBase64String(replay.Buffer)}}",
-                        "Options": {{replay.Options.ToJson()}},
-                        "RoundtripTime": "{{replay.RoundtripTime}}",
-                        "Status": "{{replay.Status}}"
-                    }
-                    """);
+                                         {
+                                             "IPAddress": "{{replay.Address}}",
+                                             "Buffer": "{{Convert.ToBase64String(replay.Buffer)}}",
+                                             "Options": {{replay.Options.ToJson()}},
+                                             "RoundtripTime": "{{replay.RoundtripTime}}",
+                                             "Status": "{{replay.Status}}"
+                                         }
+                                         """);
             }
         }
         catch (Exception ex) {
@@ -128,8 +134,7 @@ public static class PingService
 
         try {
             using var socket = new Socket(SocketType.Stream, ProtocolType.Tcp) {
-                SendTimeout = timeout,
-                ReceiveTimeout = timeout,
+                SendTimeout = timeout, ReceiveTimeout = timeout
             };
 
             //using var token = new CancellationTokenSource(TimeSpan.FromMilliseconds(timeout));

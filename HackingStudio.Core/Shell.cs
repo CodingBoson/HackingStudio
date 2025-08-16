@@ -2,12 +2,12 @@
 
 public class Shell
 {
-	public void Run() 
-	{
-		while (true) {
-			var commandLine = SmartConsole.ReadLine(prompt: $"[Hacking-Studio]$ ", ConsoleColor.Green);
+    public void Run()
+    {
+        while (true) {
+            var commandLine = SmartConsole.ReadLine("[Hacking-Studio]$ ", ConsoleColor.Green);
 
 
-		}
-	}
+        }
+    }
 }

@@ -1,5 +1,5 @@
-﻿using Realtin.Xdsl;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using Realtin.Xdsl;
 
 namespace HackingStudio.Core.Chef;
 
@@ -16,19 +16,19 @@ public sealed partial class Recipe(XdslDocument root)
         error = "";
 
         if (_root.Root?.Children is not XdslElementCollection steps) {
-            error = $"This recipe does not have any step, sorry I can't cook your food.";
+            error = "This recipe does not have any step, sorry I can't cook your food.";
 
             return false;
         }
 
         var tempData = data;
 
-        foreach (var definedStep in steps) { 
+        foreach (var definedStep in steps) {
             if (StepFactory.TryGetStep(definedStep.Name, out var stepHandler)) {
                 try {
                     tempData = stepHandler.Perform(tempData, definedStep);
                 }
-                catch (Exception ex) { 
+                catch (Exception ex) {
                     error = $"{ex.GetType().Name}: {ex.Message}";
 
                     return false;

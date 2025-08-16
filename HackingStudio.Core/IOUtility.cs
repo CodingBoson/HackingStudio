@@ -5,16 +5,18 @@ namespace HackingStudio.Core;
 public static class IOUtility
 {
     /// <summary>
-    /// Converts a double into a shortened format with suffixes (B, KB, MB, GB, TB, etc.).
+    ///     Converts a double into a shortened format with suffixes (B, KB, MB, GB, TB, etc.).
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static string PrettySize(double number)
     {
-        string[] suffixes = { "B", "KB", "MB", "GB", "TB" };
+        string[] suffixes = {
+            "B", "KB", "MB", "GB", "TB"
+        };
 
-        int suffixIndex = 0;
+        var suffixIndex = 0;
 
-        double absNumber = Math.Abs(number);
+        var absNumber = Math.Abs(number);
 
         // Loop until the absolute value is less than 1000 or we run out of suffixes
         while (absNumber >= 1000 && suffixIndex < suffixes.Length - 1) {
@@ -23,7 +25,7 @@ public static class IOUtility
         }
 
         // Format with one decimal place if necessary (e.g., 1.2K) and reapply the sign if needed
-        string formatted = absNumber.ToString("0.####") + suffixes[suffixIndex];
+        var formatted = absNumber.ToString("0.####") + suffixes[suffixIndex];
 
         return (number < 0 ? "-" : "") + formatted;
     }
@@ -39,12 +41,12 @@ public static class IOUtility
 
             return (long)(num * KB_Mul);
         }
-        else if (size.Length > 2 && size.EndsWith("MB", StringComparison.OrdinalIgnoreCase)) {
+        if (size.Length > 2 && size.EndsWith("MB", StringComparison.OrdinalIgnoreCase)) {
             var num = double.Parse(size[..^2]);
 
             return (long)(num * MB_Mul);
         }
-        else if (size.Length > 2 && size.EndsWith("GB", StringComparison.OrdinalIgnoreCase)) {
+        if (size.Length > 2 && size.EndsWith("GB", StringComparison.OrdinalIgnoreCase)) {
             var num = double.Parse(size[..^2]);
 
             return (long)(num * GB_Mul);

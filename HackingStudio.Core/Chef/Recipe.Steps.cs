@@ -1,8 +1,8 @@
-﻿using BosonWare.Cryptography;
+﻿using System.Security.Cryptography;
+using System.Text;
+using BosonWare.Cryptography;
 using BosonWare.Encoding;
 using Realtin.Xdsl;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace HackingStudio.Core.Chef;
 
@@ -10,15 +10,6 @@ public sealed partial class Recipe
 {
     public abstract class Step
     {
-        public class Parameter
-        {
-            public required Type Type { get; set; }
-
-            public required string Name { get; set; }
-
-            public required string Description { get; set; }
-        }
-
         public int InstanceId { get; private set; }
 
         public virtual string Description => "";
@@ -37,15 +28,24 @@ public sealed partial class Recipe
 
             return copy;
         }
+
+        public class Parameter
+        {
+            public required Type Type { get; set; }
+
+            public required string Name { get; set; }
+
+            public required string Description { get; set; }
+        }
     }
 
     [Step("Base64Encode")]
     public sealed class Base64EncodeStep : Step
     {
         public override string Description => """
-            Uses base64 to encode the input data.
-            Usage: <Base64Encode />
-            """;
+                                              Uses base64 to encode the input data.
+                                              Usage: <Base64Encode />
+                                              """;
 
         public override byte[] Perform(byte[] data, XdslElement definedStep)
         {
@@ -57,9 +57,9 @@ public sealed partial class Recipe
     public sealed class Base64DecodeStep : Step
     {
         public override string Description => """
-            Uses base64 to decode the input data.
-            Usage: <Base64Decode />
-            """;
+                                              Uses base64 to decode the input data.
+                                              Usage: <Base64Decode />
+                                              """;
 
         public override byte[] Perform(byte[] data, XdslElement definedStep)
         {
@@ -71,13 +71,13 @@ public sealed partial class Recipe
     public sealed class Base58EncodeStep : Step
     {
         public override string Description => """
-            Uses base58 to encode the input data.
-            Usage: <Base58Encode />
-            """;
+                                              Uses base58 to encode the input data.
+                                              Usage: <Base58Encode />
+                                              """;
 
         public override byte[] Perform(byte[] data, XdslElement definedStep)
         {
-            byte[] output = Encoding.UTF8.GetBytes(Base58.EncodeData(data));
+            var output = Encoding.UTF8.GetBytes(Base58.EncodeData(data));
 
             return output;
         }
@@ -87,9 +87,9 @@ public sealed partial class Recipe
     public sealed class Base58DecodeStep : Step
     {
         public override string Description => """
-            Uses base58 to decode the input data.
-            Usage: <Base58Decode />
-            """;
+                                              Uses base58 to decode the input data.
+                                              Usage: <Base58Decode />
+                                              """;
 
         public override byte[] Perform(byte[] data, XdslElement definedStep)
         {
@@ -105,22 +105,22 @@ public sealed partial class Recipe
     public sealed class AesEncryptStep : Step
     {
         public override string Description => """
-            Uses AES to encrypt the input data.
-            Note: The key is derived using SHA-256.
-            Usage: <AesEncrypt key="your_key"/>
-            """;
+                                              Uses AES to encrypt the input data.
+                                              Note: The key is derived using SHA-256.
+                                              Usage: <AesEncrypt key="your_key"/>
+                                              """;
 
-        public override Parameter[] Parameters => [new Parameter() {
-            Type = typeof(string),
-            Name = "key",
-            Description = "The encryption key."
-        }];
+        public override Parameter[] Parameters => [
+            new() {
+                Type = typeof(string), Name = "key", Description = "The encryption key."
+            }
+        ];
 
         public override byte[] Perform(byte[] data, XdslElement definedStep)
         {
             var keyText = definedStep.GetAttribute("key")?.Value
-                ?? throw new ArgumentNullException(nameof(definedStep),
-                $"Attribute 'key' is required for AesEncrypt.");
+                          ?? throw new ArgumentNullException(nameof(definedStep),
+                              "Attribute 'key' is required for AesEncrypt.");
 
             var key = SHA256.HashData(Encoding.UTF8.GetBytes(keyText));
 
@@ -134,22 +134,22 @@ public sealed partial class Recipe
     public sealed class AesDecryptStep : Step
     {
         public override string Description => """
-            Uses AES to decrypt the input data.
-            Note: The key is derived using SHA-256.
-            Usage: <AesDecrypt key="your_key"/>
-            """;
+                                              Uses AES to decrypt the input data.
+                                              Note: The key is derived using SHA-256.
+                                              Usage: <AesDecrypt key="your_key"/>
+                                              """;
 
-        public override Parameter[] Parameters => [new Parameter() {
-            Type = typeof(string),
-            Name = "key",
-            Description = "The decryption key."
-        }];
+        public override Parameter[] Parameters => [
+            new() {
+                Type = typeof(string), Name = "key", Description = "The decryption key."
+            }
+        ];
 
         public override byte[] Perform(byte[] data, XdslElement definedStep)
         {
-            var keyText = definedStep.GetAttribute("key")?.Value 
-                ?? throw new ArgumentNullException(nameof(definedStep), 
-                $"Attribute 'key' is required for AesDecrypt.");
+            var keyText = definedStep.GetAttribute("key")?.Value
+                          ?? throw new ArgumentNullException(nameof(definedStep),
+                              "Attribute 'key' is required for AesDecrypt.");
 
             var key = SHA256.HashData(Encoding.UTF8.GetBytes(keyText));
 

@@ -4,69 +4,69 @@ namespace HackingStudio.Core;
 
 public sealed class PluginEnvironment(Plugin plugin) : IDisposable
 {
-	public const string EnvironmentDirectory = ".hs-env";
+    public const string EnvironmentDirectory = ".hs-env";
 
-	private readonly Plugin _plugin = plugin;
+    private readonly Plugin _plugin = plugin;
 
-	public string WorkingDirectory { get; set; } = Environment.CurrentDirectory;
+    public string WorkingDirectory { get; set; } = Environment.CurrentDirectory;
 
-	public async Task ExecuteAsync(string arguments)
-	{
-		Directory.SetCurrentDirectory(PluginManager.GetPluginRoot(_plugin));
+    public void Dispose()
+    {
+        if (Directory.Exists(EnvironmentDirectory)) {
+            Directory.Delete(EnvironmentDirectory, true);
+        }
+    }
 
-		SetupUnixFileModes(_plugin);
+    public async Task ExecuteAsync(string arguments)
+    {
+        Directory.SetCurrentDirectory(PluginManager.GetPluginRoot(_plugin));
 
-		// Set up environment variables.
-		Directory.CreateDirectory(EnvironmentDirectory);
+        SetupUnixFileModes(_plugin);
 
-		File.WriteAllText(Path.Combine(EnvironmentDirectory, "path"), WorkingDirectory);
+        // Set up environment variables.
+        Directory.CreateDirectory(EnvironmentDirectory);
 
-		var (commandName, args) = CommandUtility.Parse(_plugin.Command);
+        File.WriteAllText(Path.Combine(EnvironmentDirectory, "path"), WorkingDirectory);
 
-		var processStart = new ProcessStartInfo(commandName, $"{args} {arguments}".Trim()) {
-			CreateNoWindow = false,
-		};
+        var (commandName, args) = CommandUtility.Parse(_plugin.Command);
 
-		processStart.Environment.Add("HSPATH", WorkingDirectory);
+        var processStart = new ProcessStartInfo(commandName, $"{args} {arguments}".Trim()) {
+            CreateNoWindow = false
+        };
 
-		using var process = Process.Start(processStart)!;
+        processStart.Environment.Add("HSPATH", WorkingDirectory);
 
-		await process.WaitForExitAsync();
-	}
+        using var process = Process.Start(processStart)!;
 
-	public void Dispose()
-	{
-		if (Directory.Exists(EnvironmentDirectory)) {
-			Directory.Delete(EnvironmentDirectory, true);
-		}
-	}
+        await process.WaitForExitAsync();
+    }
 
-	private static void SetupUnixFileModes(Plugin plugin)
-	{
-		if (plugin.UnixFileModes.Count != 0 && (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())) {
-			foreach (var mode in plugin.UnixFileModes) {
-				var parts = mode.Split(":");
+    private static void SetupUnixFileModes(Plugin plugin)
+    {
+        if (plugin.UnixFileModes.Count != 0 && (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())) {
+            foreach (var mode in plugin.UnixFileModes) {
+                var parts = mode.Split(":");
 
-				if (parts.Length != 2) {
-					SmartConsole.LogInfo($"The specified unix file mode '{mode}' is not in the correct format e.g. (FileName:Mode).");
+                if (parts.Length != 2) {
+                    SmartConsole.LogInfo($"The specified unix file mode '{mode}' is not in the correct format e.g. (FileName:Mode).");
 
-					continue;
-				}
+                    continue;
+                }
 
-				var filename = parts[0];
-				var unixMode = parts[1];
+                var filename = parts[0];
+                var unixMode = parts[1];
 
-				try {
-					UnixFileMode fileMode = unixMode.StartsWith('+')
-						? File.GetUnixFileMode(filename) | Enum.Parse<UnixFileMode>(unixMode.AsSpan(1))
-						: Enum.Parse<UnixFileMode>(unixMode);
+                try {
+                    var fileMode = unixMode.StartsWith('+')
+                        ? File.GetUnixFileMode(filename) | Enum.Parse<UnixFileMode>(unixMode.AsSpan(1))
+                        : Enum.Parse<UnixFileMode>(unixMode);
 
-					File.SetUnixFileMode(filename, fileMode);
-				}
-				catch (Exception ex) {
-					SmartConsole.LogError(ex.Message);
-				}
-			}
-		}
-	}
+                    File.SetUnixFileMode(filename, fileMode);
+                }
+                catch (Exception ex) {
+                    SmartConsole.LogError(ex.Message);
+                }
+            }
+        }
+    }
 }

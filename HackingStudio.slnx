@@ -1,4 +1,9 @@
 <Solution>
-  <Project Path="HackingStudio.CLI/HackingStudio.CLI.csproj" />
-  <Project Path="HackingStudio.Core/HackingStudio.Core.csproj" />
+    <Folder Name="/docs/">
+        <File Path="LICENSE"/>
+        <File Path="README.md"/>
+    </Folder>
+    <Project Path="HackingStudio.Annotations\HackingStudio.Annotations.csproj" Type="Classic C#"/>
+    <Project Path="HackingStudio.Core/HackingStudio.Core.csproj"/>
+    <Project Path="HackingStudio\HackingStudio.csproj"/>
 </Solution>

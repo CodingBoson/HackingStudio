@@ -12,8 +12,7 @@ public static class ProcessAnalyzer
             processes.AddRange(Process.GetProcessesByName(name));
         }
         else {
-            processes.AddRange(Process.GetProcesses().
-                Where(x => x.ProcessName.Contains(name, StringComparison.InvariantCultureIgnoreCase)));
+            processes.AddRange(Process.GetProcesses().Where(x => x.ProcessName.Contains(name, StringComparison.InvariantCultureIgnoreCase)));
         }
 
         return processes;
@@ -48,9 +47,7 @@ public static class ProcessAnalyzer
     public static async Task Start(string fileName, bool interactive)
     {
         var startInfo = new ProcessStartInfo(fileName) {
-            RedirectStandardError = true,
-            RedirectStandardOutput = true,
-            RedirectStandardInput = interactive,
+            RedirectStandardError = true, RedirectStandardOutput = true, RedirectStandardInput = interactive
             //CreateNoWindow = true,
         };
 

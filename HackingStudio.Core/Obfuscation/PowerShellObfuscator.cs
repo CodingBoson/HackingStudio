@@ -12,7 +12,7 @@ public class PowerShellObfuscator : IObfuscator
 
         var payload = script;
 
-        for (int i = 0; i < layers; i++) {
+        for (var i = 0; i < layers; i++) {
             payload = Convert.ToBase64String(Encoding.UTF8.GetBytes(payload));
         }
 
@@ -24,7 +24,7 @@ public class PowerShellObfuscator : IObfuscator
         var layerIncrement = AssignNumber(builder, 1);
 
         var vars = Random.Shared.Next(15, 45);
-        for (int i = 0; i < vars; i++) {
+        for (var i = 0; i < vars; i++) {
             var data = new byte[Random.Shared.Next(8, 64)];
 
             Random.Shared.NextBytes(data);
@@ -36,27 +36,27 @@ public class PowerShellObfuscator : IObfuscator
             var expressionVariable = ObfuscatorUtility.VariableName();
 
             builder.AppendLine($$"""
-             ${{expressionVariable}}=${{payloadVariable}}
-             ${{layerVariable}} = 1
-            
-             ${{layersAsIntVar}} = {{ReadNumber(layersVariable)}}
-             while (${{layerVariable}} -le ${{layersAsIntVar}}) {
-                 ${{expressionVariable}} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(${{expressionVariable}}))
-                 
-                 ${{layerVariable}} += {{ReadNumber(layerIncrement)}}
-             }
-            
-             iex ${{expressionVariable}}
-             """);
+                                 ${{expressionVariable}}=${{payloadVariable}}
+                                 ${{layerVariable}} = 1
+
+                                 ${{layersAsIntVar}} = {{ReadNumber(layersVariable)}}
+                                 while (${{layerVariable}} -le ${{layersAsIntVar}}) {
+                                     ${{expressionVariable}} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(${{expressionVariable}}))
+                                     
+                                     ${{layerVariable}} += {{ReadNumber(layerIncrement)}}
+                                 }
+
+                                 iex ${{expressionVariable}}
+                                 """);
         }
         else {
             var variable = payloadVariable;
-            for (int i = 0; i < layers; i++) {
+            for (var i = 0; i < layers; i++) {
                 var newVariable = ObfuscatorUtility.VariableName();
 
                 builder.AppendLine($"""
-                ${newVariable} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(${variable}))
-                """);
+                                    ${newVariable} = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(${variable}))
+                                    """);
 
                 variable = newVariable;
             }

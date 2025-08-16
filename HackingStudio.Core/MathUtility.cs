@@ -1,15 +1,15 @@
 ﻿using System.Numerics;
 using System.Runtime.CompilerServices;
 
-namespace Maths;
+namespace HackingStudio.Core;
 
 /// <summary>
-/// Provides mathematical utility functions.
+///     Provides mathematical utility functions.
 /// </summary>
 public static class MathUtility
 {
     /// <summary>
-    /// Raises a number to a specified power.
+    ///     Raises a number to a specified power.
     /// </summary>
     /// <typeparam name="TNum">The numeric type.</typeparam>
     /// <param name="value">The base value.</param>
@@ -18,9 +18,9 @@ public static class MathUtility
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TNum Pow<TNum>(TNum value, int power) where TNum : INumber<TNum>
     {
-        TNum result = value;
+        var result = value;
 
-        for (int i = 1; i < power; i++) {
+        for (var i = 1; i < power; i++) {
             result *= value;
         }
 
@@ -28,7 +28,7 @@ public static class MathUtility
     }
 
     /// <summary>
-    /// Sums a list of values selected from a collection.
+    ///     Sums a list of values selected from a collection.
     /// </summary>
     /// <typeparam name="T">The type of elements in the collection.</typeparam>
     /// <typeparam name="TNum">The numeric type of the sum.</typeparam>
@@ -40,16 +40,16 @@ public static class MathUtility
     {
         TNum result = new();
 
-        for (int i = 0; i < items.Count; i++) {
+        for (var i = 0; i < items.Count; i++) {
             var num = selector(items[i]);
             result += num;
         }
 
         return result;
     }
-    
+
     /// <summary>
-    /// Sums a list of values selected from a collection.
+    ///     Sums a list of values selected from a collection.
     /// </summary>
     /// <typeparam name="T">The type of elements in the collection.</typeparam>
     /// <typeparam name="TNum">The numeric type of the sum.</typeparam>
@@ -70,7 +70,7 @@ public static class MathUtility
     }
 
     /// <summary>
-    /// Calculates the percentage difference between two numeric values.
+    ///     Calculates the percentage difference between two numeric values.
     /// </summary>
     /// <typeparam name="TNum">The numeric type.</typeparam>
     /// <param name="start">The starting value.</param>
@@ -83,14 +83,14 @@ public static class MathUtility
             throw new ArgumentException("Start value cannot be zero, because division by zero is a no-go!");
         }
 
-        TNum difference = end - start;
-        TNum percentageDifference = difference / start * TNum.CreateChecked(100);
+        var difference = end - start;
+        var percentageDifference = difference / start * TNum.CreateChecked(100);
 
         return percentageDifference;
     }
 
     /// <summary>
-    /// Calculates the linear parameter that produces the interpolant value within the range [a, b].
+    ///     Calculates the linear parameter that produces the interpolant value within the range [a, b].
     /// </summary>
     /// <typeparam name="TNum">The numeric type.</typeparam>
     /// <param name="a">The start value.</param>
@@ -108,7 +108,7 @@ public static class MathUtility
     }
 
     /// <summary>
-    /// Linearly interpolates between two values based on a parameter.
+    ///     Linearly interpolates between two values based on a parameter.
     /// </summary>
     /// <param name="a">The start value.</param>
     /// <param name="b">The end value.</param>
@@ -116,11 +116,11 @@ public static class MathUtility
     /// <returns>The interpolated value.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static float Lerp(float a, float b, float t)
-	{
-		t = Math.Clamp(t, 0.0f, 1.0f);
+    {
+        t = Math.Clamp(t, 0.0f, 1.0f);
 
-		return a + (b - a) * t;
-	}
+        return a + (b - a) * t;
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsSexyPrime(int i)
@@ -130,7 +130,7 @@ public static class MathUtility
             return false;
 
         // Check if either i + 6 or i - 6 (if i is large enough) is prime.
-        return IsPrime(i + 6) || (i > 6 && IsPrime(i - 6));
+        return IsPrime(i + 6) || i > 6 && IsPrime(i - 6);
     }
 
     // A simple helper method to check for primality.
@@ -143,8 +143,9 @@ public static class MathUtility
             return true;
         if (n % 2 == 0)
             return false;
-        int boundary = (int)Math.Sqrt(n);
-        for (int j = 3; j <= boundary; j += 2) {
+
+        var boundary = (int)Math.Sqrt(n);
+        for (var j = 3; j <= boundary; j += 2) {
             if (n % j == 0)
                 return false;
         }

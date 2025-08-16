@@ -11,8 +11,8 @@ public static class CommandLineParser
         var inQuotes = false;
         char? quoteChar = null;
 
-        for (int i = 0; i < commandLine.Length; i++) {
-            char c = commandLine[i];
+        for (var i = 0; i < commandLine.Length; i++) {
+            var c = commandLine[i];
 
             if ((c == '"' || c == '\'') && (i == 0 || commandLine[i - 1] != '\\')) {
                 if (inQuotes && c == quoteChar) {

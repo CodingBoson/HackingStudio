@@ -6,8 +6,6 @@ namespace HackingStudio.Core;
 
 public sealed class Brute
 {
-    public int Threads { get; }
-
     public Brute(int threads)
     {
         if (threads <= 0)
@@ -16,22 +14,23 @@ public sealed class Brute
         Threads = threads;
     }
 
+    public int Threads { get; }
+
     public string? Find(string hash, string algorithm, string encoding, List<string> words)
     {
         using var cancellationSource = new CancellationTokenSource();
 
         ParallelOptions options = new() {
-            MaxDegreeOfParallelism = Threads,
-            CancellationToken = cancellationSource.Token
+            MaxDegreeOfParallelism = Threads, CancellationToken = cancellationSource.Token
         };
 
         object @lock = new();
         string? match = null;
 
         try {
-            Parallel.ForEach(words, options, (word) => {
-                byte[] wordHash = Hash(algorithm, word);
-                string encodedHash = Encode(wordHash, encoding);
+            Parallel.ForEach(words, options, word => {
+                var wordHash = Hash(algorithm, word);
+                var encodedHash = Encode(wordHash, encoding);
 
                 if (encodedHash == hash) {
                     lock (@lock) {

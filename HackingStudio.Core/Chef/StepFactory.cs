@@ -5,25 +5,7 @@ namespace HackingStudio.Core.Chef;
 
 public static class StepFactory
 {
-    private sealed class EqualityComparer : IEqualityComparer<string>
-    {
-        bool IEqualityComparer<string>.Equals(string? x, string? y)
-        {
-            if (x == null && y == null) return true;
-            if (x == null || y == null) return true;
-
-            return x.Equals(y, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        int IEqualityComparer<string>.GetHashCode(string obj)
-        {
-            return obj.GetHashCode(StringComparison.InvariantCultureIgnoreCase);
-        }
-    }
-
     private static readonly Dictionary<string, Recipe.Step> _steps = new(new EqualityComparer());
-
-    public static IDictionary<string, Recipe.Step> Steps => _steps;
 
     static StepFactory()
     {
@@ -55,8 +37,26 @@ public static class StepFactory
         }
     }
 
+    public static IDictionary<string, Recipe.Step> Steps => _steps;
+
     public static bool TryGetStep(string name, [NotNullWhen(true)] out Recipe.Step? step)
     {
         return _steps.TryGetValue(name, out step);
+    }
+
+    private sealed class EqualityComparer : IEqualityComparer<string>
+    {
+        bool IEqualityComparer<string>.Equals(string? x, string? y)
+        {
+            if (x == null && y == null) return true;
+            if (x == null || y == null) return true;
+
+            return x.Equals(y, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        int IEqualityComparer<string>.GetHashCode(string obj)
+        {
+            return obj.GetHashCode(StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 }

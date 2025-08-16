@@ -1,16 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	  <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-	  <Authors>Realtin (CodingBoson)</Authors>
-	  <Company>BosonWare, Technologies</Company>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Authors>Realtin (CodingBoson)</Authors>
+        <Company>BosonWare, Technologies</Company>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="BosonWare.Runtime" Version="2.0.1" />
-    <PackageReference Include="Realtin.Xdsl" Version="1.2.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="BosonWare.Runtime" Version="2.0.1"/>
+        <PackageReference Include="Realtin.Xdsl" Version="1.2.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\HackingStudio.Annotations\HackingStudio.Annotations.csproj"/>
+    </ItemGroup>
 
 </Project>
