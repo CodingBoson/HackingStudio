@@ -1,1 +1,1 @@
-[assembly: Application("HackingStudio", Version = "3.0.0")]
+[assembly: Application("HackingStudio", Version = "1.0.0")]
